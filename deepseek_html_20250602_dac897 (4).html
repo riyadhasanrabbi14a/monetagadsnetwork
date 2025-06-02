@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monetag Reward Ads</title>
+    <!-- Monetag Ad Scripts -->
+    <script src='//niphaumeenses.net/vignette.min.js' data-zone='9403045' data-sdk='show_9403045'></script>
+    <script src='//niphaumeenses.net/vignette.min.js' data-zone='9403045' data-sdk='show_9403045'></script>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f0f0f0;
+            --button-bg: #081beb;
+            --button-text: #ffffff;
+            --info-bg: rgba(0,0,0,0.05);
+            --reset-btn: #c0392b;
+            --mode-btn: #27ae60;
+            --language-btn: #9b59b6;
+            --table-border: #dddddd;
+            --control-panel-bg: #f8f8f8;
+        }
+
+        .dark-mode {
+            --bg-color: #222222;
+            --text-color: #ffffff;
+            --card-bg: #333333;
+            --button-bg: #555555;
+            --button-text: #ffffff;
+            --info-bg: rgba(255,255,255,0.1);
+            --table-border: #444444;
+            --control-panel-bg: #444444;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .app-container {
+            background: var(--card-bg);
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            width: 350px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            transition: all 0.3s ease;
+        }
+
+        h2 {
+            margin: 0 0 15px 0;
+        }
+
+        .counter {
+            font-size: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: var(--button-text);
+            background-color: var(--button-bg);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 3px;
+        }
+
+        .info-panel {
+            background: var(--info-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .time-display {
+            font-weight: bold;
+            font-family: monospace;
+        }
+
+        .usage-stats {
+            margin-top: 15px;
+        }
+
+        .usage-stats p {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            background: var(--control-panel-bg);
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .control-panel button {
+            flex: 1;
+            margin: 0 2px;
+            padding: 6px 8px;
+            font-size: 13px;
+        }
+
+        .reset-btn {
+            background-color: var(--reset-btn);
+        }
+
+        .mode-btn {
+            background-color: var(--mode-btn);
+        }
+
+        .language-btn {
+            background-color: var(--language-btn);
+        }
+
+        .country-flag {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .ad-counters {
+            margin-top: 20px;
+        }
+
+        .note {
+            font-size: 12px;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            border: 1px solid var(--table-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .stats-table td {
+            padding: 8px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--table-border);
+        }
+
+        .stats-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ad-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .ad-buttons button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .earth-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%23ffffff" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-16.93a8 8 0 0 1 0 15.86zm2 0V17.9a8 8 0 0 1 0-15.86z"/></svg>');
+            background-size: contain;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .ip-info {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 3px;
+            word-break: break-all;
+        }
+        
+        .detection-failed {
+            color: #e74c3c;
+        }
+        
+        #loading-spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h2 id="app-title">Monetag Ads System</h2>
+        
+        <div class="control-panel">
+            <button class="mode-btn" id="modeBtn" onclick="toggleMode()">🌙 Dark</button>
+            <button class="language-btn" onclick="toggleLanguage()"><span class="earth-icon"></span><span id="languageText">English</span></button>
+            <button class="reset-btn" onclick="resetAll()">Reset All</button>
+        </div>
+
+        <div class="info-panel">
+            <p id="country-info">Detecting your location... <span id="loading-spinner">🔄</span></p>
+            <div class="ip-info" id="ip-info"></div>
+            
+            <div class="timer-container">
+                <p>Bangladesh Time: <span class="time-display" id="bd-time">00:00:00</span></p>
+                <p>Your Time: <span class="time-display" id="local-time">00:00:00</span></p>
+            </div>
+            
+            <div class="usage-stats">
+                <p>Current Session: <span class="time-display" id="session-timer">00:00:00</span></p>
+                <p>Today's Usage: <span class="time-display" id="today-usage">00:00:00</span></p>
+                <p>Yesterday's Usage: <span class="time-display" id="yesterday-usage">00:00:00</span></p>
+            </div>
+        </div>
+
+        <table class="stats-table">
+            <tr>
+                <td>Today's Total Ads:</td>
+                <td id="todayAdsCount">0</td>
+            </tr>
+            <tr>
+                <td>All Time Total Ads:</td>
+                <td id="totalAdsCount">0</td>
+            </tr>
+        </table>
+
+        <div class="ad-counters">
+            <div class="counter">
+                <span>Reward Ads:</span>
+                <span id="rewardCount">0</span>
+            </div>
+            <div class="counter">
+                <span>Claim Ads:</span>
+                <span id="claimCount">0</span>
+            </div>
+
+            <div class="ad-buttons">
+                <button id="rewardBtn" onclick="handleAd('reward')">Watch Ad</button>
+                <button id="claimBtn" onclick="handleAd('claim')">Claim Now</button>
+            </div>
+            <div class="note" id="rewardNote"></div>
+            <div class="note" id="claimNote"></div>
+        </div>
+
+        <button onclick="openAdverticaLink()">Advertica Direct Link</button>
+    </div>
+
+    <script>
+        // Country database with 50+ countries
+        const countryFlags = {
+            'BD': { name: 'Bangladesh', flag: '🇧🇩' },
+            'US': { name: 'United States', flag: '🇺🇸' },
+            'IN': { name: 'India', flag: '🇮🇳' },
+            'GB': { name: 'United Kingdom', flag: '🇬🇧' },
+            'CA': { name: 'Canada', flag: '🇨🇦' },
+            'AU': { name: 'Australia', flag: '🇦🇺' },
+            'DE': { name: 'Germany', flag: '🇩🇪' },
+            'FR': { name: 'France', flag: '🇫🇷' },
+            'IT': { name: 'Italy', flag: '🇮🇹' },
+            'ES': { name: 'Spain', flag: '🇪🇸' },
+            'JP': { name: 'Japan', flag: '🇯🇵' },
+            'KR': { name: 'South Korea', flag: '🇰🇷' },
+            'CN': { name: 'China', flag: '🇨🇳' },
+            'RU': { name: 'Russia', flag: '🇷🇺' },
+            'BR': { name: 'Brazil', flag: '🇧🇷' },
+            'MX': { name: 'Mexico', flag: '🇲🇽' },
+            'ID': { name: 'Indonesia', flag: '🇮🇩' },
+            'PK': { name: 'Pakistan', flag: '🇵🇰' },
+            'NG': { name: 'Nigeria', flag: '🇳🇬' },
+            'EG': { name: 'Egypt', flag: '🇪🇬' },
+            'ZA': { name: 'South Africa', flag: '🇿🇦' },
+            'SA': { name: 'Saudi Arabia', flag: '🇸🇦' },
+            'AE': { name: 'UAE', flag: '🇦🇪' },
+            'TR': { name: 'Turkey', flag: '🇹🇷' },
+            'NL': { name: 'Netherlands', flag: '🇳🇱' },
+            'SE': { name: 'Sweden', flag: '🇸🇪' },
+            'NO': { name: 'Norway', flag: '🇳🇴' },
+            'FI': { name: 'Finland', flag: '🇫🇮' },
+            'DK': { name: 'Denmark', flag: '🇩🇰' },
+            'CH': { name: 'Switzerland', flag: '🇨🇭' },
+            'AT': { name: 'Austria', flag: '🇦🇹' },
+            'BE': { name: 'Belgium', flag: '🇧🇪' },
+            'PL': { name: 'Poland', flag: '🇵🇱' },
+            'PT': { name: 'Portugal', flag: '🇵🇹' },
+            'GR': { name: 'Greece', flag: '🇬🇷' },
+            'AR': { name: 'Argentina', flag: '🇦🇷' },
+            'CL': { name: 'Chile', flag: '🇨🇱' },
+            'CO': { name: 'Colombia', flag: '🇨🇴' },
+            'PE': { name: 'Peru', flag: '🇵🇪' },
+            'VE': { name: 'Venezuela', flag: '🇻🇪' },
+            'MY': { name: 'Malaysia', flag: '🇲🇾' },
+            'TH': { name: 'Thailand', flag: '🇹🇭' },
+            'VN': { name: 'Vietnam', flag: '🇻🇳' },
+            'PH': { name: 'Philippines', flag: '🇵🇭' },
+            'SG': { name: 'Singapore', flag: '🇸🇬' },
+            'IL': { name: 'Israel', flag: '🇮🇱' },
+            'IR': { name: 'Iran', flag: '🇮🇷' },
+            'IQ': { name: 'Iraq', flag: '🇮🇶' },
+            'KW': { name: 'Kuwait', flag: '🇰🇼' },
+            'QA': { name: 'Qatar', flag: '🇶🇦' },
+            'OM': { name: 'Oman', flag: '🇴🇲' }
+        };
+
+        // Multiple fallback IP APIs
+        const ipApis = [
+            'https://ipapi.co/json/',
+            'https://ipinfo.io/json?token=free',
+            'https://api.ipgeolocation.io/ipgeo?apiKey=free',
+            'https://geolocation-db.com/json/'
+        ];
+
+        // Language System
+        const translations = {
+            en: {
+                title: "Monetag Ads System",
+                country: "Country",
+                loading: "Loading...",
+                ip: "IP",
+                session: "Current Session:",
+                bdTime: "Bangladesh Time:",
+                localTime: "Your Time:",
+                watchAd: "Watch Ad ",
+                claimNow: "Claim Now",
+                advertica: "Advertica Direct Link",
+                languageBtn: "English",
+                toggleModeDark: "🌙 Dark",
+                toggleModeLight: "🌞 Light",
+                reset: "Reset All",
+                rewardAds: "Reward Ads:",
+                claimAds: "Claim Ads:",
+                todayAds: "Today's Total Ads:",
+                totalAds: "All Time Total Ads:",
+                cooldown: "Please wait 15 seconds",
+                adError: "Ad failed to load. Please try again later.",
+                noAdReady: "No ad available at the moment. Please try again later.",
+                detectionFailed: "Location detection failed. Using default: Bangladesh"
+            },
+            bn: {
+                title: "মনিট্যাগ অ্যাড সিস্টেম",
+                country: "দেশ",
+                loading: "লোড হচ্ছে...",
+                ip: "আইপি",
+                session: "বর্তমান সেশন:",
+                bdTime: "বাংলাদেশ সময়:",
+                localTime: "আপনার সময়:",
+                watchAd: "রিওয়ার্ড পেতে অ্যাড দেখুন",
+                claimNow: "এখনই ক্লেইম করুন",
+                advertica: "এডভার্টিকা ডাইরেক্ট লিংক",
+                languageBtn: "বাংলা",
+                toggleModeDark: "🌙 ডার্ক",
+                toggleModeLight: "🌞 লাইট",
+                reset: "সব রিসেট",
+                rewardAds: "রিওয়ার্ড অ্যাড:",
+                claimAds: "ক্লেইম অ্যাড:",
+                todayAds: "আজকের মোট অ্যাড:",
+                totalAds: "সর্বমোট অ্যাড:",
+                cooldown: "১৫ সেকেন্ড অপেক্ষা করুন",
+                adError: "অ্যাড লোড করতে ব্যর্থ। পরে আবার চেষ্টা করুন।",
+                noAdReady: "এখন কোন অ্যাড পাওয়া যাচ্ছে না। পরে আবার চেষ্টা করুন।",
+                detectionFailed: "লোকেশন ডিটেক্ট ব্যর্থ। ডিফল্ট হিসেবে বাংলাদেশ ব্যবহার করা হচ্ছে"
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'en';
+        let rewardCount = parseInt(localStorage.getItem('rewardCount')) || 0;
+        let claimCount = parseInt(localStorage.getItem('claimCount')) || 0;
+        let totalAdsCount = parseInt(localStorage.getItem('totalAdsCount')) || 0;
+        let todayAds = parseInt(localStorage.getItem('todayAds')) || 0;
+        let sessionStart = new Date();
+        let todayStart = new Date();
+        let yesterdayUsage = parseInt(localStorage.getItem('yesterdayUsage')) || 0;
+        let yesterdayAds = parseInt(localStorage.getItem('yesterdayAds')) || 0;
+        let todayUsage = 0;
+
+        // Detect country using multiple fallback APIs
+        async function detectCountry() {
+            const t = translations[currentLang];
+            let detected = false;
+            
+            for (const apiUrl of ipApis) {
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) continue;
+                    
+                    const data = await response.json();
+                    const countryCode = data.country || data.country_code;
+                    const ip = data.ip || data.query;
+                    
+                    if (countryCode && ip) {
+                        const countryInfo = countryFlags[countryCode] || { 
+                            name: data.country_name || `Unknown (${countryCode})`, 
+                            flag: '🌐' 
+                        };
+                        
+                        updateCountryInfo(countryInfo.name, countryInfo.flag, ip);
+                        detected = true;
+                        break;
+                    }
+                } catch (error) {
+                    console.log(`API failed: ${apiUrl}`, error);
+                    continue;
+                }
+            }
+            
+            if (!detected) {
+                document.getElementById('loading-spinner').remove();
+                document.getElementById('country-info').innerHTML = 
+                    `<span class="detection-failed">${t.country}: Bangladesh 🇧🇩 (${t.detectionFailed})</span>`;
+                document.getElementById('ip-info').textContent = `${t.ip}: Not available`;
+            }
+        }
+
+        function updateCountryInfo(countryName, flag, ip) {
+            const t = translations[currentLang];
+            document.getElementById('loading-spinner').remove();
+            document.getElementById('country-info').innerHTML = 
+                `<strong>${t.country}:</strong> ${countryName} ${flag}`;
+            document.getElementById('ip-info').textContent = `${t.ip}: ${ip}`;
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'bn' : 'en';
+            localStorage.setItem('lang', currentLang);
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLang];
+            document.getElementById('app-title').textContent = t.title;
+            document.getElementById('languageText').textContent = t.languageBtn;
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            document.getElementById('modeBtn').textContent = isDarkMode ? t.toggleModeLight : t.toggleModeDark;
+            
+            document.querySelector('.reset-btn').textContent = t.reset;
+            document.getElementById('rewardBtn').textContent = t.watchAd;
+            document.getElementById('claimBtn').textContent = t.claimNow;
+            document.querySelector('button[onclick="openAdverticaLink()"]').textContent = t.advertica;
+            
+            document.querySelectorAll('.counter')[0].innerHTML = `<span>${t.rewardAds}</span><span id="rewardCount">${rewardCount}</span>`;
+            document.querySelectorAll('.counter')[1].innerHTML = `<span>${t.claimAds}</span><span id="claimCount">${claimCount}</span>`;
+            
+            document.querySelector('.stats-table tr:first-child td:first-child').textContent = t.todayAds;
+            document.querySelector('.stats-table tr:last-child td:first-child').textContent = t.totalAds;
+            
+            document.getElementById('session-timer').previousSibling.textContent = t.session;
+            document.getElementById('bd-time').previousSibling.textContent = t.bdTime;
+            document.getElementById('local-time').previousSibling.textContent = t.localTime;
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            const t = translations[currentLang];
+            document.getElementById('modeBtn').textContent = isDarkMode ? t.toggleModeLight : t.toggleModeDark;
+        }
+
+        function handleAd(type) {
+            const t = translations[currentLang];
+            const btn = type === 'reward' ? document.getElementById('rewardBtn') : document.getElementById('claimBtn');
+            const note = type === 'reward' ? document.getElementById('rewardNote') : document.getElementById('claimNote');
+            
+            btn.disabled = true;
+            note.textContent = t.cooldown;
+            
+            const adFunction = type === 'reward' ? show_9403045 : show_9403045;
+            
+            if (typeof adFunction !== 'function') {
+                console.error('Ad function not found for type:', type);
+                btn.disabled = false;
+                note.textContent = t.adError;
+                return;
+            }
+            
+            try {
+                adFunction()
+                    .then(() => {
+                        updateAdCount(type);
+                        startCooldown(btn.id, note.id);
+                    })
+                    .catch(error => {
+                        console.error('Ad error:', error);
+                        btn.disabled = false;
+                        note.textContent = t.noAdReady;
+                    });
+            } catch (error) {
+                console.error('Ad execution error:', error);
+                btn.disabled = false;
+                note.textContent = t.adError;
+            }
+        }
+
+        function updateAdCount(type) {
+            if (type === 'reward') {
+                rewardCount++;
+                localStorage.setItem('rewardCount', rewardCount);
+            } else if (type === 'claim') {
+                claimCount++;
+                localStorage.setItem('claimCount', claimCount);
+            }
+            
+            todayAds = rewardCount + claimCount;
+            totalAdsCount++;
+            
+            localStorage.setItem('todayAds', todayAds);
+            localStorage.setItem('totalAdsCount', totalAdsCount);
+            updateAdCounters();
+        }
+
+        function updateAdCounters() {
+            document.getElementById('rewardCount').textContent = rewardCount;
+            document.getElementById('claimCount').textContent = claimCount;
+            document.getElementById('todayAdsCount').textContent = todayAds;
+            document.getElementById('totalAdsCount').textContent = totalAdsCount;
+        }
+
+        function updateTimers() {
+            const now = new Date();
+            
+            const sessionDiff = Math.floor((now - sessionStart) / 1000);
+            document.getElementById('session-timer').textContent = formatTime(sessionDiff);
+            
+            const todayDiff = Math.floor((now - todayStart) / 1000);
+            const totalTodayUsage = todayUsage + todayDiff;
+            document.getElementById('today-usage').textContent = formatTime(totalTodayUsage);
+            
+            document.getElementById('yesterday-usage').textContent = formatTime(yesterdayUsage);
+            
+            document.getElementById('bd-time').textContent = 
+                now.toLocaleTimeString('en-US', {timeZone: 'Asia/Dhaka', hour12: false});
+            
+            document.getElementById('local-time').textContent = 
+                now.toLocaleTimeString([], {hour12: false});
+        }
+
+        function formatTime(totalSeconds) {
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+            return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function startCooldown(buttonId, noteId) {
+            let seconds = 15;
+            const btn = document.getElementById(buttonId);
+            const note = document.getElementById(noteId);
+            
+            const t = translations[currentLang];
+            note.textContent = t.cooldown;
+            
+            const originalText = btn.textContent;
+            const interval = setInterval(() => {
+                btn.textContent = currentLang === 'bn' 
+                    ? `${seconds} সেকেন্ড` 
+                    : `${seconds} seconds`;
+                seconds--;
+                
+                if (seconds < 0) {
+                    clearInterval(interval);
+                    btn.textContent = originalText;
+                    btn.disabled = false;
+                    note.textContent = "";
+                }
+            }, 1000);
+        }
+
+        function resetAll() {
+            rewardCount = 0;
+            claimCount = 0;
+            todayAds = 0;
+            localStorage.setItem('rewardCount', rewardCount);
+            localStorage.setItem('claimCount', claimCount);
+            localStorage.setItem('todayAds', todayAds);
+            
+            sessionStart = new Date();
+            todayStart = new Date();
+            todayUsage = 0;
+            localStorage.setItem('todayUsage', todayUsage);
+            
+            updateAdCounters();
+            
+            const t = translations[currentLang];
+            alert(currentLang === 'bn' ? "সব ডেটা রিসেট করা হয়েছে" : "All data has been reset");
+        }
+
+        function openAdverticaLink() {
+            window.open('https://data963.click/e63adc9f8e8fa7be6643/2e6b70c870/?placementName=default', '_blank');
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            detectCountry();
+            updateLanguage();
+            
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                const t = translations[currentLang];
+                document.getElementById('modeBtn').textContent = t.toggleModeLight;
+            }
+            
+            // Check if it's a new day
+            const today = new Date().toDateString();
+            const lastVisitDate = localStorage.getItem('lastVisitDate');
+            const savedTodayUsage = parseInt(localStorage.getItem('todayUsage')) || 0;
+            const savedTodayAds = parseInt(localStorage.getItem('todayAds')) || 0;
+            
+            if (lastVisitDate === today) {
+                todayUsage = savedTodayUsage;
+                todayAds = savedTodayAds;
+            } else {
+                yesterdayUsage = savedTodayUsage;
+                yesterdayAds = savedTodayAds;
+                todayUsage = 0;
+                todayAds = 0;
+                localStorage.setItem('yesterdayUsage', yesterdayUsage);
+                localStorage.setItem('yesterdayAds', yesterdayAds);
+                localStorage.setItem('todayUsage', todayUsage);
+                localStorage.setItem('todayAds', todayAds);
+                localStorage.setItem('lastVisitDate', today);
+            }
+            
+            updateAdCounters();
+            setInterval(updateTimers, 1000);
+            updateTimers();
+            
+            // Save usage data every minute
+            setInterval(() => {
+                const now = new Date();
+                const todayDiff = Math.floor((now - todayStart) / 1000);
+                todayUsage += todayDiff;
+                localStorage.setItem('todayUsage', todayUsage);
+                localStorage.setItem('todayAds', todayAds);
+                todayStart = new Date();
+                
+                if (now.getHours() === 0 && now.getMinutes() === 0) {
+                    yesterdayUsage = todayUsage;
+                    yesterdayAds = todayAds;
+                    todayUsage = 0;
+                    todayAds = 0;
+                    localStorage.setItem('yesterdayUsage', yesterdayUsage);
+                    localStorage.setItem('yesterdayAds', yesterdayAds);
+                    localStorage.setItem('todayUsage', todayUsage);
+                    localStorage.setItem('todayAds', todayAds);
+                    localStorage.setItem('lastVisitDate', now.toDateString());
+                }
+            }, 60000);
+        });
+    </script>
+</body>
+</html>
